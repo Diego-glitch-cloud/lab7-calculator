@@ -53,11 +53,34 @@ describe('useCalculator Hook - Error States', () => {
     const { result } = renderHook(() => useCalculator())
 
     act(() => {
-      // 999,999,999 + 1
       '999999999'.split('').forEach(d => result.current.addDigit(d))
       result.current.applyOperator('+')
       result.current.addDigit('1')
       result.current.execute()
+    })
+
+    expect(result.current.currentValue).toBe('ERROR')
+  })
+
+  it('should return ERROR on negative results (5 - 10)', () => {
+    const { result } = renderHook(() => useCalculator())
+
+    act(() => {
+      result.current.addDigit('5')
+      result.current.applyOperator('-')
+      result.current.addDigit('10')
+      result.current.execute()
+    })
+
+    expect(result.current.currentValue).toBe('ERROR')
+  })
+
+  it('should return ERROR when using +/- to make a number negative', () => {
+    const { result } = renderHook(() => useCalculator())
+
+    act(() => {
+      result.current.addDigit('5')
+      result.current.toggleSign()
     })
 
     expect(result.current.currentValue).toBe('ERROR')
