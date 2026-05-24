@@ -1,5 +1,5 @@
 import { Button } from './Button'
-import { Operator } from '../hooks/useCalculator'
+import type { Operator } from '../hooks/useCalculator'
 import './Keypad.css'
 
 interface Props { onDigit: (d: string) => void; onOp: (o: Operator) => void; onExec: () => void; onClear: () => void; onSign: () => void }

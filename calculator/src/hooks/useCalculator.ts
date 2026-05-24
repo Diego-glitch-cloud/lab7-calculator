@@ -59,7 +59,6 @@ export const useCalculator = () => {
       if (prev.currentValue.startsWith('-')) {
         return { ...prev, currentValue: prev.currentValue.slice(1) }
       } else {
-        const newValue = '-' + prev.currentValue
         // Rule: results cannot be negative. If user uses +/- to make it negative, it's ERROR.
         return { ...prev, currentValue: 'ERROR' }
       }
