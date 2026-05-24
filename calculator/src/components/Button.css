@@ -1,0 +1,14 @@
+.btn {
+  background: var(--button-bg);
+  color: var(--text-color);
+  padding: 20px;
+  font-size: 1.2rem;
+  border: 1px solid #333;
+  transition: all 0.2s;
+}
+.btn:hover {
+  background: var(--accent-color);
+  color: #000;
+}
+.btn-op { color: var(--accent-color); }
+.btn-action { color: #ff5555; }
