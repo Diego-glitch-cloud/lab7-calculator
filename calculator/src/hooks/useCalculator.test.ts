@@ -86,3 +86,21 @@ describe('useCalculator Hook - Error States', () => {
     expect(result.current.currentValue).toBe('ERROR')
   })
 })
+
+describe('useCalculator Hook - Precision', () => {
+  it('should truncate long division results to 9 characters (10 / 3)', () => {
+    const { result } = renderHook(() => useCalculator())
+
+    act(() => {
+      result.current.addDigit('1')
+      result.current.addDigit('0')
+      result.current.applyOperator('/')
+      result.current.addDigit('3')
+      result.current.execute()
+    })
+
+    // 10 / 3 = 3.333333333... -> 3.3333333 (9 characters total)
+    expect(result.current.currentValue).toBe('3.3333333')
+    expect(result.current.currentValue.length).toBe(9)
+  })
+})
