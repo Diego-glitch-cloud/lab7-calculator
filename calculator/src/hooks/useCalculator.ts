@@ -22,14 +22,18 @@ export const useCalculator = () => {
       if (prev.shouldResetDisplay) {
         return {
           ...prev,
-          currentValue: digit,
+          currentValue: digit === '.' ? '0.' : digit,
           shouldResetDisplay: false
         }
       }
 
       if (prev.currentValue.length >= 9) return prev
+      if (digit === '.' && prev.currentValue.includes('.')) return prev
 
-      const newValue = prev.currentValue === '0' ? digit : prev.currentValue + digit
+      const newValue = prev.currentValue === '0' && digit !== '.'
+        ? digit
+        : prev.currentValue + digit
+
       return { ...prev, currentValue: newValue }
     })
   }
