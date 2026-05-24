@@ -7,7 +7,6 @@ describe('useCalculator Hook - Character Limit', () => {
     const { result } = renderHook(() => useCalculator())
 
     act(() => {
-      // Input 12 digits
       '123456789012'.split('').forEach(d => result.current.addDigit(d))
     })
 
@@ -19,7 +18,6 @@ describe('useCalculator Hook - Character Limit', () => {
     const { result } = renderHook(() => useCalculator())
 
     act(() => {
-      // 1.23456789 (10 chars total) -> should be 1.2345678
       '1.23456789'.split('').forEach(d => result.current.addDigit(d))
     })
 
@@ -36,16 +34,32 @@ describe('useCalculator Hook - Chaining', () => {
       result.current.addDigit('2')
       result.current.applyOperator('+')
       result.current.addDigit('3')
-      result.current.applyOperator('*') // Should calculate 5 here
+      result.current.applyOperator('*')
     })
     
     expect(result.current.currentValue).toBe('5')
     
     act(() => {
       result.current.addDigit('4')
-      result.current.execute() // Should calculate 5 * 4
+      result.current.execute()
     })
 
     expect(result.current.currentValue).toBe('20')
+  })
+})
+
+describe('useCalculator Hook - Error States', () => {
+  it('should return ERROR on upper overflow (> 999,999,999)', () => {
+    const { result } = renderHook(() => useCalculator())
+
+    act(() => {
+      // 999,999,999 + 1
+      '999999999'.split('').forEach(d => result.current.addDigit(d))
+      result.current.applyOperator('+')
+      result.current.addDigit('1')
+      result.current.execute()
+    })
+
+    expect(result.current.currentValue).toBe('ERROR')
   })
 })
