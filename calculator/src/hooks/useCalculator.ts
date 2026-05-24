@@ -17,6 +17,20 @@ export const useCalculator = () => {
     shouldResetDisplay: false
   })
 
+  const formatResult = (num: number): string => {
+    const str = num.toString()
+    if (str.length <= 9) return str
+
+    const precision = num < 0 ? 8 : 9
+    let formatted = num.toPrecision(precision)
+
+    if (formatted.includes('.')) {
+      formatted = parseFloat(formatted).toString()
+    }
+
+    return formatted.slice(0, 9)
+  }
+
   const addDigit = (digit: string) => {
     setState((prev) => {
       if (prev.shouldResetDisplay || prev.currentValue === 'ERROR') {
@@ -62,7 +76,7 @@ export const useCalculator = () => {
       case '%': result = first % second; break
       default: return second.toString()
     }
-    return result.toString()
+    return formatResult(result)
   }
 
   const applyOperator = (nextOperator: Operator) => {
