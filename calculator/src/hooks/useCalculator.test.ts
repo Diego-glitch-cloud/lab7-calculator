@@ -27,3 +27,25 @@ describe('useCalculator Hook - Character Limit', () => {
     expect(result.current.currentValue.length).toBe(9)
   })
 })
+
+describe('useCalculator Hook - Chaining', () => {
+  it('should chain operations sequentially (2 + 3 * 4 = 20)', () => {
+    const { result } = renderHook(() => useCalculator())
+
+    act(() => {
+      result.current.addDigit('2')
+      result.current.applyOperator('+')
+      result.current.addDigit('3')
+      result.current.applyOperator('*') // Should calculate 5 here
+    })
+    
+    expect(result.current.currentValue).toBe('5')
+    
+    act(() => {
+      result.current.addDigit('4')
+      result.current.execute() // Should calculate 5 * 4
+    })
+
+    expect(result.current.currentValue).toBe('20')
+  })
+})
