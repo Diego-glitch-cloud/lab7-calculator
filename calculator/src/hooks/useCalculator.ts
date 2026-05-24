@@ -17,7 +17,25 @@ export const useCalculator = () => {
     shouldResetDisplay: false
   })
 
+  const addDigit = (digit: string) => {
+    setState((prev) => {
+      if (prev.shouldResetDisplay) {
+        return {
+          ...prev,
+          currentValue: digit,
+          shouldResetDisplay: false
+        }
+      }
+
+      if (prev.currentValue.length >= 9) return prev
+
+      const newValue = prev.currentValue === '0' ? digit : prev.currentValue + digit
+      return { ...prev, currentValue: newValue }
+    })
+  }
+
   return {
-    ...state
+    ...state,
+    addDigit
   }
 }
