@@ -1,0 +1,9 @@
+.keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+/* Zero spans 2 columns */
+.keypad-grid button:nth-last-child(3) {
+  grid-column: span 2;
+}
