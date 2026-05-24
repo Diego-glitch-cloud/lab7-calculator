@@ -18,12 +18,12 @@ export const useCalculator = () => {
   })
 
   const formatResult = (num: number): string => {
+    if (num < 0 || num > 999999999) return 'ERROR'
+    
     const str = num.toString()
     if (str.length <= 9) return str
 
-    const precision = num < 0 ? 8 : 9
-    let formatted = num.toPrecision(precision)
-
+    let formatted = num.toPrecision(9)
     if (formatted.includes('.')) {
       formatted = parseFloat(formatted).toString()
     }
@@ -56,13 +56,13 @@ export const useCalculator = () => {
     setState((prev) => {
       if (prev.currentValue === '0' || prev.currentValue === 'ERROR') return prev
 
-      const newValue = prev.currentValue.startsWith('-')
-        ? prev.currentValue.slice(1)
-        : '-' + prev.currentValue
-
-      if (newValue.length > 9) return prev
-
-      return { ...prev, currentValue: newValue }
+      if (prev.currentValue.startsWith('-')) {
+        return { ...prev, currentValue: prev.currentValue.slice(1) }
+      } else {
+        const newValue = '-' + prev.currentValue
+        // Rule: results cannot be negative. If user uses +/- to make it negative, it's ERROR.
+        return { ...prev, currentValue: 'ERROR' }
+      }
     })
   }
 
@@ -81,7 +81,7 @@ export const useCalculator = () => {
 
   const applyOperator = (nextOperator: Operator) => {
     setState((prev) => {
-      if (prev.currentValue === 'ERROR') return prev
+      if (prev.currentValue === 'ERROR' && nextOperator !== null) return prev
 
       if (prev.operator && !prev.shouldResetDisplay) {
         const result = solve(
@@ -92,7 +92,7 @@ export const useCalculator = () => {
         return {
           currentValue: result,
           operator: nextOperator,
-          previousValue: result,
+          previousValue: result === 'ERROR' ? null : result,
           shouldResetDisplay: true
         }
       }
